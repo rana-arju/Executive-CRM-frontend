@@ -87,7 +87,7 @@ export function Sidebar({ className, onNavClick }: SidebarProps) {
         {getNavItems().map((item, idx) => {
           const isActive = pathname === item.path;
           return (
-            <Link key={idx} href={item.path} passHref legacyBehavior>
+            <Link key={idx} href={item.path}>
               <Button 
                 variant={isActive ? "secondary" : "ghost"} 
                 className={cn("w-full justify-start font-medium", isActive ? "bg-primary/10 text-primary hover:bg-primary/20" : "")}
@@ -106,15 +106,17 @@ export function Sidebar({ className, onNavClick }: SidebarProps) {
           <span className="text-xs text-muted-foreground font-medium">Theme</span>
           <ThemeToggle />
         </div>
-        <div className="bg-muted rounded-xl p-4 flex items-center gap-3 border border-border/50 shadow-sm">
-          <Avatar className="h-9 w-9 border border-primary/20">
-            <AvatarFallback className="bg-primary/10 text-primary">{role[0]}</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium">{role}</span>
-            <span className="text-xs text-muted-foreground">{role === 'Madelynn' ? 'Owner / Admin' : 'Team Member'}</span>
+        <Link href="/settings" className="block">
+          <div className="bg-muted rounded-xl p-4 flex items-center gap-3 border border-border/50 shadow-sm hover:border-primary/50 transition-colors cursor-pointer group">
+            <Avatar className="h-9 w-9 border border-primary/20 group-hover:border-primary/50 transition-colors">
+              <AvatarFallback className="bg-primary/10 text-primary">{role[0]}</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">{role}</span>
+              <span className="text-xs text-muted-foreground">{role === 'Madelynn' ? 'Owner / Admin' : 'Team Member'}</span>
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
     </aside>
   );
