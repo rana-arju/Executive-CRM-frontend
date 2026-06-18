@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { AlertCircle, CheckCircle2, Clock, MailWarning, UserCog, Briefcase, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { OwnerSettingsModal } from '@/components/modals/OwnerSettingsModal';
 
 export function OwnerDashboard() {
   const { tasks, emails, entities } = useSelector((state: RootState) => state.crm);
@@ -32,7 +33,7 @@ export function OwnerDashboard() {
           <h2 className="text-3xl font-bold tracking-tight text-foreground">Welcome back, Madelynn</h2>
           <p className="text-muted-foreground mt-1 text-sm">Here's what requires your attention today.</p>
         </div>
-        <Button className="bg-primary shadow-lg shadow-primary/20"><UserCog className="mr-2 h-4 w-4"/> Owner Settings</Button>
+        <OwnerSettingsModal />
       </div>
 
       {/* Stat Cards */}
