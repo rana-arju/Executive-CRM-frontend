@@ -83,11 +83,11 @@ export function Sidebar({ className, onNavClick }: SidebarProps) {
 
       <Separator className="mx-4 w-auto mb-4 bg-border/50" />
 
-      <nav className="flex-1 px-4 space-y-1">
+      <nav className="flex-1 px-4 space-y-2">
         {getNavItems().map((item, idx) => {
           const isActive = pathname === item.path;
           return (
-            <Link key={idx} href={item.path}>
+            <Link key={idx} href={item.path} className="block">
               <Button 
                 variant={isActive ? "secondary" : "ghost"} 
                 className={cn("w-full justify-start font-medium", isActive ? "bg-primary/10 text-primary hover:bg-primary/20" : "")}

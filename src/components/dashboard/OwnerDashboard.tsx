@@ -28,12 +28,14 @@ export function OwnerDashboard() {
 
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-foreground">Welcome back, Madelynn</h2>
           <p className="text-muted-foreground mt-1 text-sm">Here's what requires your attention today.</p>
         </div>
-        <OwnerSettingsModal />
+        <div className="self-start sm:self-auto">
+          <OwnerSettingsModal />
+        </div>
       </div>
 
       {/* Stat Cards */}
@@ -121,7 +123,7 @@ export function OwnerDashboard() {
                       </TableCell>
                       <TableCell>
                         {email.status === 'Awaiting approval' ? (
-                          <div className="flex gap-2">
+                          <div className="flex flex-wrap gap-2">
                             <Button size="sm" variant="default" className="h-7 text-xs">Approve</Button>
                             <Button size="sm" variant="outline" className="h-7 text-xs">Private</Button>
                           </div>
