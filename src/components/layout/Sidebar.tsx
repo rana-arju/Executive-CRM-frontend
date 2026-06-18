@@ -2,8 +2,10 @@
 
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/lib/store';
-import { setRole, setActiveTab, ActiveTab } from '@/lib/features/crmSlice';
+import { setRole } from '@/lib/features/crmSlice';
 import { LayoutDashboard, CheckSquare, Mail, Users, Settings, Briefcase, Command } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
@@ -19,28 +21,29 @@ interface SidebarProps {
 export function Sidebar({ className, onNavClick }: SidebarProps) {
   const dispatch = useDispatch();
   const role = useSelector((state: RootState) => state.crm.userRole);
-  const activeTab = useSelector((state: RootState) => state.crm.activeTab);
+  const pathname = usePathname();
+  const router = useRouter();
 
-  const getNavItems = (): {name: ActiveTab, icon: any}[] => {
+  const getNavItems = (): {name: string, path: string, icon: any}[] => {
     switch (role) {
       case 'Madelynn':
         return [
-          { name: 'Overview', icon: LayoutDashboard },
-          { name: 'Team Queue', icon: Users },
-          { name: 'Inbox / Logs', icon: Mail },
-          { name: 'Projects', icon: Briefcase },
-          { name: 'Vendors', icon: Settings },
+          { name: 'Overview', path: '/overview', icon: LayoutDashboard },
+          { name: 'Team Queue', path: '/team-queue', icon: Users },
+          { name: 'Inbox / Logs', path: '/inbox', icon: Mail },
+          { name: 'Projects', path: '/projects', icon: Briefcase },
+          { name: 'Vendors', path: '/vendors', icon: Settings },
         ];
       case 'Beverly':
       case 'Pat':
         return [
-          { name: 'My Tasks', icon: CheckSquare },
-          { name: 'Completed', icon: CheckSquare },
+          { name: 'My Tasks', path: '/my-tasks', icon: CheckSquare },
+          { name: 'Completed', path: '/completed', icon: CheckSquare },
         ];
       case 'Client A':
         return [
-          { name: 'Executive Dashboard', icon: LayoutDashboard },
-          { name: 'Decisions', icon: Command },
+          { name: 'Executive Dashboard', path: '/executive-dashboard', icon: LayoutDashboard },
+          { name: 'Decisions', path: '/decisions', icon: Command },
         ];
       default:
         return [];
@@ -60,7 +63,12 @@ export function Sidebar({ className, onNavClick }: SidebarProps) {
       
       <div className="px-4 py-4">
         <label className="text-xs text-muted-foreground uppercase tracking-wider mb-2 block font-medium px-2">View As Role</label>
-        <Select value={role} onValueChange={(val: any) => dispatch(setRole(val))}>
+        <Select value={role} onValueChange={(val: any) => {
+          dispatch(setRole(val));
+          if (val === 'Madelynn') router.push('/overview');
+          else if (val === 'Client A') router.push('/executive-dashboard');
+          else router.push('/my-tasks');
+        }}>
           <SelectTrigger className="w-full bg-background/50 border-none">
             <SelectValue placeholder="Select role" />
           </SelectTrigger>
@@ -77,20 +85,18 @@ export function Sidebar({ className, onNavClick }: SidebarProps) {
 
       <nav className="flex-1 px-4 space-y-1">
         {getNavItems().map((item, idx) => {
-          const isActive = activeTab === item.name;
+          const isActive = pathname === item.path;
           return (
-            <Button 
-              key={idx} 
-              variant={isActive ? "secondary" : "ghost"} 
-              className={cn("w-full justify-start font-medium", isActive ? "bg-primary/10 text-primary hover:bg-primary/20" : "")}
-              onClick={() => {
-                dispatch(setActiveTab(item.name));
-                onNavClick?.();
-              }}
-            >
-              <item.icon className="mr-3 h-4 w-4" />
-              {item.name}
-            </Button>
+            <Link key={idx} href={item.path} passHref legacyBehavior>
+              <Button 
+                variant={isActive ? "secondary" : "ghost"} 
+                className={cn("w-full justify-start font-medium", isActive ? "bg-primary/10 text-primary hover:bg-primary/20" : "")}
+                onClick={() => onNavClick?.()}
+              >
+                <item.icon className="mr-3 h-4 w-4" />
+                {item.name}
+              </Button>
+            </Link>
           )
         })}
       </nav>
